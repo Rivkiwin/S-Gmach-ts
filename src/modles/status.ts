@@ -1,0 +1,1 @@
+export const UserStatus=[{value:"valid",label:"תקין"},{value:"inValid",label:"לא תקין"}]
