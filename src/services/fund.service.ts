@@ -1,20 +1,17 @@
 import axios from "axios";
 import { BaseService } from "./baseService";
 
-export class UserService extends BaseService {
+export class FundService extends BaseService {
     
     constructor() {
-        super("user");
+        super("fund");
     }
 
-    getByFund()
-    {
-
-    }
-
-    async getFunds(id:string)
+    async getByUser(id:string)
     {
         let res=await axios.get(`${this.baseUrl}uif/getByUser/${id}`);
         return res
     }
 }
+
+export default FundService

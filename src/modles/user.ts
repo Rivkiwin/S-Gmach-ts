@@ -18,6 +18,7 @@ export interface UserInterface {
     email: string,
     maritalStatus: string,
     DateOfBirth: Date;
+    tz:string
 }
 
 export class User implements UserInterface {
@@ -40,5 +41,6 @@ export class User implements UserInterface {
     email: string = "";
     maritalStatus: string = "";
     DateOfBirth: Date=new Date();
+    tz:string=''
 
 }

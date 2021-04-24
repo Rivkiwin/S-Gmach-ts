@@ -1,4 +1,5 @@
 import UsersList from "./components/users/list";
+import UserDetails from "./components/users/userdetails";
 
 export const routers=[
     {
@@ -10,5 +11,16 @@ export const routers=[
         name:"הכנסות",
         component:UsersList,
         path:'/user'
-     }
+     },
+     {
+      component:UserDetails,
+      path:'/UserDetails/:id'
+   }
+]
+
+export const routersB=[
+   {
+      component:UserDetails,
+      path:'/user/:id'
+   }
 ]

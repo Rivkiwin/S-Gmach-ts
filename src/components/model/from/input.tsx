@@ -10,22 +10,23 @@ export class InputTextProps {
     ref?: any;
     onChange: any;
     type?: string;
+    defaultVale?:any;
 }
 
 
-const InputText = ({ name, label, value, required, onChange, type }: InputTextProps) => {
+const InputText = ({ name, label, value, required, onChange, type,defaultVale }: InputTextProps) => {
 
     return (
 
-        <TextField defaultValue={value} variant="outlined"
-           name={name}
+        <TextField defaultValue={defaultVale} variant="outlined"
+            name={name}
             id="outlined-helperText"
             size="small"
             label={label}
             type={type}
             onChange={onChange}
+            required={required}
         >
-
         </TextField>
     )
 }

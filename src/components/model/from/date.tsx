@@ -1,8 +1,16 @@
 import { InputProps, TextField } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { InputTextProps } from "./input";
 
 const DateController = ({ label, value, onChange, name }: InputTextProps) => {
+  const [defaultVale, setDefault] = useState<any>(value)
+
+  useEffect(() => {
+  if( !( typeof(value)=="string"))
+  {
+    setDefault(`${value.getFullYear()}-${value.getMonth()}-${value.getDay()}`);
+  }
+  }, [])
   return (
     <TextField
       id="date"
@@ -10,7 +18,7 @@ const DateController = ({ label, value, onChange, name }: InputTextProps) => {
       onChange={onChange}
       label={label}
       type="date"
-      defaultValue="2017-05-24"
+      defaultValue={defaultVale}
       size="small"
       className={"controller"}
       InputLabelProps={{

@@ -11,18 +11,20 @@ export class selectProps implements InputTextProps {
     ref?: any;
     onChange: any;
     options: { label: string, value: string }[] = [];
+    defaultValue:any;
 }
 
-const SelectController = ({ name, label, onChange, options, value }: selectProps) => {
+const SelectController = ({ name, label, onChange, options, value ,defaultValue}: selectProps) => {
+    console.log(options)
     return (
-        <FormControl variant="outlined" className="formControl">
+        <FormControl size="small" variant="outlined" className="formControl">
             <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
             <Select
                 native
                 value={value}
                 label={label}
-                // size="small"
-                onChange={onChange}
+                onChange={(e)=>{debugger;onChange(e)}}
+                defaultValue={defaultValue}
                 inputProps={{
                     name: name,
                     id: 'outlined-age-native-simple',
@@ -32,7 +34,7 @@ const SelectController = ({ name, label, onChange, options, value }: selectProps
                 {options.map(option => {
                     debugger
                     return (
-                        <option value={option.value}>{option.label}</option>
+                        <option value={option.value}>{option.label} </option>
                     )
                 })
                 }
