@@ -5,7 +5,7 @@ import './scss/base.scss';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 
-import UsersList from './components/users/list';
+import UsersList from './components/users/usersList';
 import { routers, routersB } from './routers';
 import HomePage from './components/homePage/homePage';
 

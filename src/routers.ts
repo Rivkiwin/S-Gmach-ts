@@ -1,4 +1,4 @@
-import UsersList from "./components/users/list";
+import UsersList from "./components/users/usersList";
 import UserDetails from "./components/users/userdetails";
 
 export const routers=[

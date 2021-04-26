@@ -11,6 +11,7 @@ import { UserControllers } from './arrayController.user';
 import { t } from './t';
 import { HeadCells } from '../../modles/headCells.model';
 import { useHistory } from 'react-router';
+import FundService from '../../services/fund.service';
 
 
 const headCells: HeadCells[] = [
@@ -23,11 +24,12 @@ const headCells: HeadCells[] = [
 ]
 
 const userService = new UserService();
+const fundService = new FundService();
 const UsersList = () => {
     const { isShowing, toggle } = useModal();
     const [open, setOpen] = useState(false);
     const [rows, setRows] = useState([]);
-    const history=useHistory();
+    const history = useHistory();
 
     const add = async (data: any) => {
         console.log(data);
@@ -39,23 +41,37 @@ const UsersList = () => {
         }
     }
 
-   function onselect(user:any){
-      history.push({ pathname: `/UserDetails/${user._id}`})
+    function onselect(user: any) {
+        history.push({ pathname: `/UserDetails/${user._id}` })
     }
     useEffect(() => {
+        let funds: any[] = [];
+        fundService.get().then(
+            res => {
+                res.data.docs.map((doc: any) => {
+                    headCells.push({ id: doc.nameId, label: doc.name, numeric: false, disablePadding: false });
+                    funds.push(doc.nameId)
+                })
+            }
+        )
         userService.get().then(
             (res: any) => {
                 let users = res.data["docs"];
                 users = users.map((user: any) => {
-                    return {
+                    let u: any =
+                    {
                         name: `${user.last_name} ${user.first_name}`,
                         father_name: user.father_name,
                         status: UserStatus.find(s => s.value == user.status)?.label,
-                        vip: user.vip ? "V" : "X", 
+                        vip: user.vip ? "V" : "X",
                         allowed: user.allowed ? "V" : "X",
-                        tz: user.tz ,
-                        _id:user._id
+                        tz: user.tz,
+                        _id: user._id
                     }
+                    funds.map(f => {
+                        u[f] = user[f] ?? "-"
+                    })
+                    return u
                 });
                 setRows(users);
             }
