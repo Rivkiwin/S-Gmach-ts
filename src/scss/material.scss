@@ -5,3 +5,9 @@
 .MuiTableCell-head{
   direction: ltr;
 }
+.MuiIcon-root{
+  cursor: pointer;
+}
+.enableSorting .MuiTableSortLabel-iconDirectionAsc{
+  display: none;
+}

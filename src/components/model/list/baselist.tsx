@@ -18,31 +18,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { HeadCells } from '../../../modles/headCells.model';
+import { PaginateOptions } from '../../../modles/PaginateOptions';
 // import DeleteIcon from '@material-ui/icons/Delete';
 // import FilterListIcon from '@material-ui/icons/FilterList';
-
-interface Data {
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
-}
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-): Data {
-  return { name, calories, fat, carbs, protein };
-}
-
-// const rows = [
-//   createData('Cupcake', 305, 3.7, 67, 4.3),
-// ];
-
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -74,17 +52,12 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
-}
+
 
 interface EnhancedTableProps {
   classes: ReturnType<typeof useStyles>;
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+  onRequestSort: ( property:string) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
@@ -94,8 +67,9 @@ interface EnhancedTableProps {
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
+  const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
+    console.log(event, property,"ddd")
+    onRequestSort(property);
   };
 
   return (
@@ -119,19 +93,22 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              onClick={headCell.enableSorting != false?createSortHandler(headCell.id):()=>{}}
+              className={`${headCell.enableSorting == false ? "enableSorting" : ''}`}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
+
                 <span className={classes.visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </span>
+
               ) : null}
             </TableSortLabel>
           </TableCell>
         ))}
       </TableRow>
-    </TableHead>
+    </TableHead >
   );
 }
 
@@ -159,10 +136,10 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
-  header:string;
+  header: string;
 }
 
-const EnhancedTableToolbar = ({numSelected,header}: EnhancedTableToolbarProps) => {
+const EnhancedTableToolbar = ({ numSelected, header }: EnhancedTableToolbarProps) => {
   const classes = useToolbarStyles();
   // const { numSelected } = props.;
 
@@ -227,21 +204,34 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   rows: any[];
   headCells: HeadCells[];
-  onSelect:any;
-  header:string
+  onSelect: any;
+  header: string;
+  onPaginationChange?: any;
 }
 
-export default function EnhancedTable({ rows, headCells,onSelect,header }: Props) {
+export default function EnhancedTable({ rows, headCells, onSelect, header, onPaginationChange }: Props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
+  const [orderBy, setOrderBy] = React.useState<string>('calories');
   const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
+  const [Pagination, setPagination] = React.useState(new PaginateOptions());
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
+  const handleRequestSort = ( property: string) => {
     const isAsc = orderBy === property && order === 'asc';
+    let sort: any = {};
+    if (property == 'name') {
+      sort = { last_name: isAsc ? -1 : 1, first_name: isAsc ? -1 : 1 };;
+    }
+    else {
+      sort[property] = isAsc ? -1 : 1;
+    }
+
+    Pagination.sort = sort;
+    console.log(Pagination.sort);
+    onPaginationChange(Pagination);
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
@@ -295,7 +285,7 @@ export default function EnhancedTable({ rows, headCells,onSelect,header }: Props
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} header={header}/>
+        <EnhancedTableToolbar numSelected={selected.length} header={header} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -342,7 +332,7 @@ export default function EnhancedTable({ rows, headCells,onSelect,header }: Props
                       {Object.keys(row).map((cal: any) => {
                         if (cal != "_id") {
                           return (
-                            <TableCell className={row[cal]=="לא תקין"?"txt-red":row[cal]<0?"bg-red":''} align="right">{row[cal]}</TableCell>
+                            <TableCell className={row[cal] == "לא תקין" ? "txt-red" : row[cal] < 0 ? "bg-red" : ''} align="right">{row[cal]}</TableCell>
                           )
                         }
                       })}

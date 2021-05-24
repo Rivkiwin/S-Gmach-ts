@@ -3,6 +3,7 @@ export interface HeadCells {
     numeric: boolean,
     disablePadding: boolean,
     label: string,
-    backgroundColor?:string;
+    enableSorting?:boolean;
+
 }
 

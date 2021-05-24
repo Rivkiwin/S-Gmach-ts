@@ -3,11 +3,11 @@
 @import "./form.scss";
 @import "./material.scss";
 @import "./txt.scss";
+@import './width.scss';
 
 body {
   direction: rtl;
-  background: aliceblue;
-}
+  background: #eeeeee5e;;}
 .cal {
   direction: rtl;
   display: inline-block;
@@ -19,4 +19,16 @@ body {
 }
 .bg-red{
 background-color: red !important;
+}
+.inline{
+  display: inline-block;
+}
+.mr-10{
+  margin-right: 10% !important;
+}
+.mr-1{
+  margin-right: 1% !important;
+}
+.f-l{
+  float: left;
 }
