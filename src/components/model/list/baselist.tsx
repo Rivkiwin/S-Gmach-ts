@@ -81,14 +81,6 @@ interface HeadCell {
   numeric: boolean;
 }
 
-const headCells: HeadCell[] = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
-  { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-  { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-  { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-  { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
-];
-
 interface EnhancedTableProps {
   classes: ReturnType<typeof useStyles>;
   numSelected: number;
@@ -109,7 +101,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        <TableCell align="right">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
@@ -167,11 +159,12 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  header:string;
 }
 
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
+const EnhancedTableToolbar = ({numSelected,header}: EnhancedTableToolbarProps) => {
   const classes = useToolbarStyles();
-  const { numSelected } = props;
+  // const { numSelected } = props.;
 
   return (
     <Toolbar
@@ -185,7 +178,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Nutrition
+          {header}
         </Typography>
       )}
       {numSelected > 0 ? (
@@ -234,10 +227,11 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   rows: any[];
   headCells: HeadCells[];
-  onSelect:any
+  onSelect:any;
+  header:string
 }
 
-export default function EnhancedTable({ rows, headCells,onSelect }: Props) {
+export default function EnhancedTable({ rows, headCells,onSelect,header }: Props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
@@ -301,7 +295,7 @@ export default function EnhancedTable({ rows, headCells,onSelect }: Props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} header={header}/>
         <TableContainer>
           <Table
             className={classes.table}
@@ -336,7 +330,7 @@ export default function EnhancedTable({ rows, headCells,onSelect }: Props) {
                       key={row.name}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
+                      <TableCell align="right">
                         <Checkbox
                           checked={isItemSelected}
                           inputProps={{ 'aria-labelledby': labelId }}
@@ -348,7 +342,7 @@ export default function EnhancedTable({ rows, headCells,onSelect }: Props) {
                       {Object.keys(row).map((cal: any) => {
                         if (cal != "_id") {
                           return (
-                            <TableCell align="right">{row[cal]}</TableCell>
+                            <TableCell className={row[cal]=="לא תקין"?"txt-red":row[cal]<0?"bg-red":''} align="right">{row[cal]}</TableCell>
                           )
                         }
                       })}

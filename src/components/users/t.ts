@@ -1,8 +1,9 @@
-export const t = {
+export const t:any = {
     first_name: "שם פרט",
     last_name: "שם משפחה",
     father_name: "שם האב",
     vip: "vip",
+    _id:"קוד",
     allowed: "חבר",
     joined_date: "תאריך הצטרפות",
     manager_permissions: "הרשאות מנהל",
@@ -23,6 +24,14 @@ export const t = {
     addWithdrawal: "הוסף משיכה",
     addLoan: "הוסף הלוואה",
     Withdrawals: "משיכות",
-    Deposits: "הפקדות"
+    Deposits: "הפקדות",
+    updatedAt:"עדכון אחרון",
+    DateOfBirth:"תאריך לידה",
+    createdAt:"תאריך יצרה",
+    tz:'ת"ז',
+    funds:'קרנות',
+    futureWithdrawals:"משיכות עתדיות",
+    fundName:'שם קרן',
+    amount:'סה"כ'
 
 }

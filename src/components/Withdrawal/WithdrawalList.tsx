@@ -9,6 +9,7 @@ const headCells: HeadCells[] = [
     { id: "status", label: "סטטוס", numeric: false, disablePadding: false },
     { id: "userName", label: "שם מושך", numeric: false, disablePadding: true },
     { id: "fundName", label: "קרן", numeric: false, disablePadding: false },
+    { id: "date", label: "תאריך", numeric: false, disablePadding: false },
     { id: "createdAt", label: "תאריך יצירה", numeric: false, disablePadding: true },
     { id: "updatedAt", label: "תאריך עדכון", numeric: false, disablePadding: false },
 ]
@@ -30,8 +31,9 @@ export const WithdrawalList = ({userId}:any) => {
                             status: Status.find(s=>s.value== w.status)?.label,
                             userName:w.userName,
                             fundName:w.fundName,
-                            createdAt:w.createdAt,
-                            updatedAt:w.updatedAt,
+                            date:w.date.split('T')[0],
+                            createdAt:w.createdAt.split('T')[0],
+                            updatedAt:w.updatedAt.split('T')[0],
                             _id:w._id
                         }
                     }
@@ -50,7 +52,7 @@ export const WithdrawalList = ({userId}:any) => {
     }
 
     return(
-        <EnhancedTable headCells={headCells}  onSelect={onselect} rows={Withdrawals}/>
+        <EnhancedTable headCells={headCells}  onSelect={onselect} rows={Withdrawals} header="משיכות"/>
     )
 }
 export default WithdrawalList;

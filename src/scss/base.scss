@@ -1,6 +1,22 @@
-@import './bars.scss';
-@import './model.scss';
-@import './form.scss';
-body{
-    direction: rtl;
+@import "./bars.scss";
+@import "./model.scss";
+@import "./form.scss";
+@import "./material.scss";
+@import "./txt.scss";
+
+body {
+  direction: rtl;
+  background: aliceblue;
+}
+.cal {
+  direction: rtl;
+  display: inline-block;
+  margin: 5px;
+}
+.cal span {
+  display: inline;
+  float: right;
+}
+.bg-red{
+background-color: red !important;
 }

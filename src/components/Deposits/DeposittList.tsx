@@ -8,6 +8,7 @@ import EnhancedTable from '../model/list/baselist';
 const headCells: HeadCells[] = [
     { id: "userName", label: "שם המפקיד", numeric: false, disablePadding: true },
     { id: "fundName", label: "קרן", numeric: false, disablePadding: false },
+    { id: "amount", label: "סכום", numeric: true, disablePadding: false },
     { id: "createdAt", label: "תאריך יצירה", numeric: false, disablePadding: true },
     { id: "updatedAt", label: "תאריך עדכון", numeric: false, disablePadding: false },
 ]
@@ -28,8 +29,9 @@ export const DepositList = ({ userId }: any) => {
                         return {
                             userName: w.userName,
                             fundName: w.fundName,
-                            createdAt: w.createdAt,
-                            updatedAt: w.updatedAt,
+                            amount:w.amount,
+                            createdAt: w.createdAt.slice(0,10),
+                            updatedAt: w.updatedAt.slice(0,10),
                             _id: w._id
                         }
                     }
@@ -47,7 +49,7 @@ export const DepositList = ({ userId }: any) => {
     }
 
     return (
-        <EnhancedTable headCells={headCells} onSelect={onselect} rows={Deposits} />
+        <EnhancedTable headCells={headCells} onSelect={onselect} rows={Deposits} header="הפקדות"/>
     )
 }
 export default DepositList;

@@ -84,7 +84,7 @@ const UsersList = () => {
             <Button variant="outlined" color="primary" onClick={toggle}>{t.add}</Button>
             <CreatUpdate isShowing={isShowing} hide={toggle} OnSubmit={add} type={"add"} header={"header"} rows={UserControllers} doc={newUser} />
             userList
-            {rows.length > 0 && <EnhancedTable rows={rows} onSelect={onselect} headCells={headCells} />}
+            {rows.length > 0 && <EnhancedTable rows={rows} onSelect={onselect} headCells={headCells} header={"רשימת חברים"}/>}
             <Snackbar open={open} autoHideDuration={6000} >
                 <Alert onClose={() => setOpen(false)} severity="success">
                     add success!
