@@ -16,20 +16,18 @@ import { blue, green } from '@material-ui/core/colors';
 import { PaginateOptions } from '../../modles/PaginateOptions';
 
 
-const headCells: HeadCells[] = [
-    { id: "name", label: "שם", numeric: false, disablePadding: false },
-    { id: "father_name", label: "שם האב", numeric: false, disablePadding: true },
-    { id: "status", label: "סטטוס", numeric: false, disablePadding: true },
-    { id: "vip", label: "vip", numeric: false, disablePadding: true },
-    { id: "allowed", label: "חבר", numeric: false, disablePadding: false },
-    { id: "tz", label: "תז", numeric: false, disablePadding: false },
-]
+let headCells: HeadCells[] = [];
+
 
 const userService = new UserService();
 const fundService = new FundService();
 const UsersList = () => {
     const { isShowing, toggle } = useModal();
     const [open, setOpen] = useState(false);
+    const [rowsPerPage, setRowsPerPage] = useState(4);
+    const [page, setPage] = useState(1);
+    const [count, setCount] = useState(1);
+
     const [funds, setFunds] = useState<any[]>([]);
 
     const [rows, setRows] = useState([]);
@@ -49,8 +47,13 @@ const UsersList = () => {
         history.push({ pathname: `/UserDetails/${user._id}` })
     }
     useEffect(() => {
-        
-        let funds: any[] = [];
+        headCells = [{ id: "name", label: "שם", numeric: false, disablePadding: false },
+        { id: "father_name", label: "שם האב", numeric: false, disablePadding: true },
+        { id: "status", label: "סטטוס", numeric: false, disablePadding: true },
+        { id: "vip", label: "vip", numeric: false, disablePadding: true },
+        { id: "allowed", label: "חבר", numeric: false, disablePadding: false },
+        { id: "tz", label: "תז", numeric: false, disablePadding: false },
+        ]
         fundService.get().then(
             res => {
                 res.data.docs.map((doc: any) => {
@@ -60,6 +63,7 @@ const UsersList = () => {
                 setFunds(funds);
             }
         )
+
     }, [])
 
     useEffect(() => {
@@ -76,6 +80,9 @@ const UsersList = () => {
         userService.paginator(paginator).then(
             (res: any) => {
                 let users = res.data["docs"];
+                setPage(res.data.page - 1);
+                setCount(res.data.total);
+                setRowsPerPage(res.data.limit)
                 users = users.map((user: any) => {
                     let u: any =
                     {
@@ -105,7 +112,14 @@ const UsersList = () => {
                 <Icon className="inline f-l" style={{ color: '#00bcd4c7', fontSize: 30 }} onClick={toggle}>add_circle</Icon>
             </div>
             <CreatUpdate isShowing={isShowing} hide={toggle} OnSubmit={add} type={"add"} header={"header"} rows={UserControllers} doc={newUser} />
-            {rows.length > 0 && <EnhancedTable onPaginationChange={getUsers} rows={rows} onSelect={onselect} headCells={headCells} header={"רשימת חברים"} />}
+            {rows.length > 0 && <EnhancedTable
+                onPaginationChange={getUsers}
+                rows={rows} onSelect={onselect}
+                headCells={headCells}
+                header={"רשימת חברים"}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                count={count} />}
             <Snackbar open={open} autoHideDuration={6000} >
                 <Alert onClose={() => setOpen(false)} severity="success">
                     add success!

@@ -32,12 +32,11 @@ const withdrawalService = new WithdrawalService();
 
 const UserDetails = () => {
     const [User, setUser] = useState<any>({});
-    const [userDetails, setDetails] = useState<any>([]);
     const [DepositController, setDepositController] = useState<any>([{}]);
-    const [uif, setUif] = useState<any>([]);
+    const [uif, setUif] = useState<any>();
 
     const [WithdrawalControllers, setWithdrawalControllers] = useState<any>([{}]);
-    const { isShowing, toggle,  isShowing2, toggle2 } = useModal();
+    const { isShowing, toggle, isShowing2, toggle2 } = useModal();
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
     const { id }: any = useParams();
@@ -56,11 +55,12 @@ const UserDetails = () => {
         fundService.getByUser(id).then(
             res => {
                 if (res.data.funds) {
-                    setUif( res.data.funds);
-                   
+                    console.log(res.data.funds)
+                    setUif(res.data.funds);
+
                 }
             }
-            )
+        )
     }, []);
 
 
@@ -90,20 +90,23 @@ const UserDetails = () => {
     return (
         <Card id="usrD">
             <CardActions id="actions">
-                <WithdrawalCU id={id} setOpen={setOpen} setMessage={setMessage} uif={uif}/>
+                <WithdrawalCU id={id} setOpen={setOpen} setMessage={setMessage} uif={uif} />
                 <Button variant="outlined" color="primary" onClick={toggle2}>{t.addDeposit}</Button>
                 <Button variant="outlined" color="primary" onClick={toggle}>{t.edit}</Button>
                 <WithdrawalByUser id={id} />
                 <DepositByUser id={id} />
-                <CreatUpdate isShowing={isShowing2} hide={toggle2} OnSubmit={addDeposit} type={"creat"} header={"header"} rows={DepositController} doc={new Deposit()} />
-                <CreatUpdate isShowing={isShowing} hide={toggle} OnSubmit={edit} type={"update"} header={"header"} rows={UserControllers} doc={User} />
+                <CreatUpdate
+                    isShowing={isShowing2} hide={toggle2} OnSubmit={addDeposit}
+                    type={"creat"} header={"header"} rows={DepositController} doc={new Deposit()} />
+                <CreatUpdate isShowing={isShowing} hide={toggle} OnSubmit={edit}
+                    type={"update"} header={"header"} rows={UserControllers} doc={User} />
                 <Snackbar open={open} autoHideDuration={6000} >
                     <Alert onClose={() => setOpen(false)} severity="success">
                         {message}
                     </Alert>
                 </Snackbar>
             </CardActions>
-            <UserD id={id} uif={uif}/>
+            {uif && <UserD id={id} uif={uif} />}
         </Card>
     )
 }

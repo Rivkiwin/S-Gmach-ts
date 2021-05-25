@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -57,7 +57,7 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
 interface EnhancedTableProps {
   classes: ReturnType<typeof useStyles>;
   numSelected: number;
-  onRequestSort: ( property:string) => void;
+  onRequestSort: (property: string) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
@@ -68,7 +68,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
-    console.log(event, property,"ddd")
+    console.log(event, property, "ddd")
     onRequestSort(property);
   };
 
@@ -93,7 +93,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={headCell.enableSorting != false?createSortHandler(headCell.id):()=>{}}
+              onClick={headCell.enableSorting != false ? createSortHandler(headCell.id) : () => { }}
               className={`${headCell.enableSorting == false ? "enableSorting" : ''}`}
             >
               {headCell.label}
@@ -207,19 +207,25 @@ interface Props {
   onSelect: any;
   header: string;
   onPaginationChange?: any;
+  count?: number;
+  page?: number;
+  rowsPerPage?: number;
 }
 
-export default function EnhancedTable({ rows, headCells, onSelect, header, onPaginationChange }: Props) {
+export default function EnhancedTable({ rows, headCells, onSelect, header, onPaginationChange, count=0, page=0, rowsPerPage=0 }: Props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('calories');
   const [selected, setSelected] = React.useState<string[]>([]);
-  const [page, setPage] = React.useState(0);
+  // const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [Pagination, setPagination] = React.useState(new PaginateOptions());
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  const handleRequestSort = ( property: string) => {
+  // const [rowsPerPage, setRowsPerPage] = React.useState(5);
+ 
+  useEffect(() => {
+    Pagination.sort={}
+  }, [])
+  const handleRequestSort = (property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     let sort: any = {};
     if (property == 'name') {
@@ -266,12 +272,16 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+    Pagination.page = newPage;
+    onPaginationChange(Pagination)
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+
+    Pagination.pageSize = parseInt(event.target.value);
+    Pagination.pageNo = 0;
+    onPaginationChange(Pagination)
+
   };
 
   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -280,7 +290,7 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage ?? - Math.min(rowsPerPage ?? 0, rows.length - page ?? 0 * rowsPerPage ?? 0);
 
   return (
     <div className={classes.root}>
@@ -350,7 +360,7 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={count}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

@@ -21,10 +21,10 @@ export const GetWithdrawalControllers = (id: string) => {
                 res.data.funds.map((f: any) => {
                     debugger
                     console.log(f);
-                    if (f.uf.balance > 0) {
-                        options.push({ label: `${f.fundName} (${f.uf.balance-f.futureWithdrawals})`, value: f.uf.fundId });
-                        console.log(options)
-                    }
+                    debugger
+                    console.log(f.uf.balance - f.futureWithdrawals, "cccc")
+                    options.push({ label: `${f.fundName} (${f.uf.balance - f.futureWithdrawals})`, value: f.uf.fundId });
+                    console.log(options)
                 }
                 )
             }

@@ -48,7 +48,7 @@ const UserD = ({ id, uif }: any) => {
             <div id="details">
                 <Details doc={userDetails} />
                 <h3 className="txt-cyan">{t.funds}</h3>
-                <FundsUser uif={uif} />
+                {uif && <FundsUser uif={uif} />}
             </div>
         </CardContent>
     )
