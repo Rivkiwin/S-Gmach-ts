@@ -81,7 +81,7 @@ const UsersList = () => {
             (res: any) => {
                 let users = res.data["docs"];
                 setPage(res.data.page - 1);
-                setCount(res.data.total);
+                setCount(res.data.pages);
                 setRowsPerPage(res.data.limit)
                 users = users.map((user: any) => {
                     let u: any =
@@ -114,7 +114,8 @@ const UsersList = () => {
             <CreatUpdate isShowing={isShowing} hide={toggle} OnSubmit={add} type={"add"} header={"header"} rows={UserControllers} doc={newUser} />
             {rows.length > 0 && <EnhancedTable
                 onPaginationChange={getUsers}
-                rows={rows} onSelect={onselect}
+                rows={rows} 
+                onSelect={onselect}
                 headCells={headCells}
                 header={"רשימת חברים"}
                 rowsPerPage={rowsPerPage}

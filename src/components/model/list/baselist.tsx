@@ -19,8 +19,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { HeadCells } from '../../../modles/headCells.model';
 import { PaginateOptions } from '../../../modles/PaginateOptions';
+import Pagination from "@material-ui/lab/Pagination";
+
 // import DeleteIcon from '@material-ui/icons/Delete';
 // import FilterListIcon from '@material-ui/icons/FilterList';
+const pageSizes = [5, 10, 15];
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -207,25 +210,27 @@ interface Props {
   onSelect: any;
   header: string;
   onPaginationChange?: any;
-  count?: number;
-  page?: number;
-  rowsPerPage?: number;
+  count: number;
+  page: number;
+  rowsPerPage: number;
 }
 
-export default function EnhancedTable({ rows, headCells, onSelect, header, onPaginationChange, count=0, page=0, rowsPerPage=0 }: Props) {
+export default function EnhancedTable({ rows, headCells, onSelect, header, onPaginationChange, count, page, rowsPerPage }: Props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('calories');
   const [selected, setSelected] = React.useState<string[]>([]);
-  // const [page, setPage] = React.useState(0);
+  const [load, setLoad] = React.useState(false);
+  // const [rows, setRows] = React.useState([..._rows]);
+
   const [dense, setDense] = React.useState(false);
-  const [Pagination, setPagination] = React.useState(new PaginateOptions());
+  const [_pagination, setPagination] = React.useState(new PaginateOptions());
   // const [rowsPerPage, setRowsPerPage] = React.useState(5);
- 
+
   useEffect(() => {
-    Pagination.sort={}
+    _pagination.sort = {}
   }, [])
-  const handleRequestSort = (property: string) => {
+  const handleRequestSort = async (property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     let sort: any = {};
     if (property == 'name') {
@@ -235,9 +240,10 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
       sort[property] = isAsc ? -1 : 1;
     }
 
-    Pagination.sort = sort;
-    console.log(Pagination.sort);
-    onPaginationChange(Pagination);
+    _pagination.sort = sort;
+    _pagination.pageNo = 0;
+    console.log(_pagination.sort);
+    await Promise.resolve(onPaginationChange(_pagination));
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
@@ -271,16 +277,17 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    Pagination.page = newPage;
-    onPaginationChange(Pagination)
+  const handleChangePage = async (event: unknown, newPage: number) => {
+    _pagination.pageNo = newPage + 1;
+    setLoad(false);
+    await Promise.resolve(onPaginationChange(_pagination, setLoad));
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (event: any) => {
 
-    Pagination.pageSize = parseInt(event.target.value);
-    Pagination.pageNo = 0;
-    onPaginationChange(Pagination)
+    _pagination.pageSize = parseInt(event.target.value);
+    _pagination.pageNo = 0;
+    onPaginationChange(_pagination)
 
   };
 
@@ -314,12 +321,10 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
               headCells={headCells}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              {rows.length > 0 && stableSort(rows, getComparator(order, orderBy))
                 .map((row: any, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
                     <TableRow
                       hover
@@ -357,6 +362,7 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
             </TableBody>
           </Table>
         </TableContainer>
+
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -366,7 +372,31 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
+
       </Paper>
+      {/* <div className="mt-3 d-ltr">
+          {"Items per Page: "}
+          <select onChange={(event) => handleChangeRowsPerPage(event)} value={rowsPerPage}>
+            {
+
+              pageSizes.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+          </select>
+
+          <Pagination
+            className="my-3"
+            count={count  }
+            page={page}
+            siblingCount={1}
+            boundaryCount={1}
+            variant="outlined"
+            shape="rounded"
+            onChange={handleChangePage}
+          />
+        </div> */}
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"

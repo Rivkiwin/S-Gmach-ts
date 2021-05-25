@@ -1,6 +1,7 @@
 import { Stats } from 'node:fs';
 import React, { useEffect, useState } from 'react';
 import { HeadCells } from '../../modles/headCells.model';
+import { PaginateOptions } from '../../modles/PaginateOptions';
 import { Status } from '../../modles/status';
 import DepositService from '../../services/deposit.service';
 import EnhancedTable from '../model/list/baselist';
@@ -17,21 +18,33 @@ const depositService = new DepositService();
 export const DepositList = ({ userId }: any) => {
 
     const [Deposits, setDeposits] = useState([]);
-    const [Paginator, setPaginator] = useState<PannerOptions>();
-
-
+    const [Paginator, setPaginator] = useState(new PaginateOptions());
+    const [rowsPerPage, setRowsPerPage] = useState(4);
+    const [page, setPage] = useState(1);
+    const [count, setCount] = useState(1);
 
     useEffect(() => {
-        depositService.get({ userId: userId.id ?? '' }).then(
+        Paginator.query = { userId: userId.id ?? '' };
+        Paginator.pageSize = 5;
+        Paginator.page = 0;
+        getData(Paginator);
+    }, []);
+
+    function getData(_p: any) {
+        _p.query = { userId: userId.id ?? '' };
+        depositService.paginator(_p).then(
             res => {
                 if (res.data.docs) {
+                    setPage(res.data.page-1);
+                    setCount(res.data.total);
+                    setRowsPerPage(res.data.limit);
                     let list = res.data.docs.map((w: any) => {
                         return {
                             userName: w.userName,
                             fundName: w.fundName,
-                            amount:w.amount,
-                            createdAt: w.createdAt.slice(0,10),
-                            updatedAt: w.updatedAt.slice(0,10),
+                            amount: w.amount,
+                            createdAt: w.createdAt.slice(0, 10),
+                            updatedAt: w.updatedAt.slice(0, 10),
                             _id: w._id
                         }
                     }
@@ -42,14 +55,23 @@ export const DepositList = ({ userId }: any) => {
 
             }
         )
-    }, []);
+    }
 
     function onselect(id: string) {
         console.log(id);
     }
 
     return (
-        <EnhancedTable headCells={headCells} onSelect={onselect} rows={Deposits} header="הפקדות"/>
+        <EnhancedTable
+        page={page}
+            onPaginationChange={getData}
+            count={count}
+            rowsPerPage={rowsPerPage}
+            headCells={headCells}
+            onSelect={onselect}
+            rows={Deposits}
+            header="הפקדות"
+        />
     )
 }
 export default DepositList;
