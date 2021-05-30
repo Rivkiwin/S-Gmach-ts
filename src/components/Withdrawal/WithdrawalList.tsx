@@ -6,6 +6,7 @@ import { Status } from '../../modles/status';
 import WithdrawalService from '../../services/withdrawal.service';
 import EnhancedTable from '../model/list/baselist';
 
+
 const headCells: HeadCells[] = [
     { id: "status", label: "סטטוס", numeric: false, disablePadding: false },
     { id: "userName", label: "שם מושך", numeric: false, disablePadding: true },
@@ -26,14 +27,13 @@ export const WithdrawalList = ({ userId }: any) => {
 
 
     useEffect(() => {
-        Paginator.query = { userId: userId.id ?? '' };
+        // Paginator.query = { userId: userId.id ?? '' };
         Paginator.pageSize = 5;
         Paginator.page = 0;
         getData(Paginator);
     }, []);
     function getData(prams: any) {
-        prams.query = { userId: userId.id ?? '' };
-        return withdrawalService.paginator(prams).then(
+        return withdrawalService.paginator(prams,userId.id ??null).then(
             res => {
                 if (res.data.docs) {
                     setPage(res.data.page - 1);

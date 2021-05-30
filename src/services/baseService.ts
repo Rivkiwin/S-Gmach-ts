@@ -16,8 +16,9 @@ export class BaseService {
         let res = await axios.get(`${this.path}`,{params:{query:query}});
         return res;
     }
-    async paginator(paginator:PaginateOptions) {
-        let res = await axios.get(`${this.path}`,{params:paginator});
+    async paginator(paginator:PaginateOptions,userId:any) {
+        debugger
+        let res = await axios.get(`${this.path}${userId?"/getByUser/"+userId:""}`,{params:paginator});
         return res;
     }
     async getById(id: string) {

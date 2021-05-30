@@ -6,10 +6,9 @@ const DateController = ({ label, value, onChange, name }: InputTextProps) => {
   const [defaultVale, setDefault] = useState<any>(value)
 
   useEffect(() => {
-  if( !( typeof(value)=="string"))
-  {
-    setDefault(`${value.getFullYear()}-${value.getMonth()}-${value.getDay()}`);
-  }
+    if (value && !(typeof (value) == "string")) {
+      setDefault(`${value.getFullYear()}-${value.getMonth()}-${value.getDay()}`);
+    }
   }, [])
   return (
     <TextField

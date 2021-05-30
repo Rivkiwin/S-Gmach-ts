@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -20,9 +20,10 @@ import Switch from '@material-ui/core/Switch';
 import { HeadCells } from '../../../modles/headCells.model';
 import { PaginateOptions } from '../../../modles/PaginateOptions';
 import Pagination from "@material-ui/lab/Pagination";
+import Filter from './filter';
 
 // import DeleteIcon from '@material-ui/icons/Delete';
-// import FilterListIcon from '@material-ui/icons/FilterList';
+import FilterListIcon from '@material-ui/icons/FilterList';
 const pageSizes = [5, 10, 15];
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -140,41 +141,52 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
 interface EnhancedTableToolbarProps {
   numSelected: number;
   header: string;
+  filters: any;
+  handleFilter: any;
 }
 
-const EnhancedTableToolbar = ({ numSelected, header }: EnhancedTableToolbarProps) => {
+const EnhancedTableToolbar = ({ numSelected, header, filters, handleFilter }: EnhancedTableToolbarProps) => {
   const classes = useToolbarStyles();
-  // const { numSelected } = props.;
-
+  const [showFilter, setShow] = useState(false)
   return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      {numSelected > 0 ? (
-        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          {header}
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            {/* <DeleteIcon /> */}
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            {/* <FilterListIcon /> */}
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
+    <>
+      <Toolbar
+        className={clsx(classes.root, {
+          [classes.highlight]: numSelected > 0,
+        })}
+      >
+        {numSelected > 0 ? (
+          <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+            {numSelected} selected
+          </Typography>
+        ) : (
+          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+            {header}
+          </Typography>
+        )}
+        {numSelected > 0 ? (
+          <Tooltip title="Delete">
+            <IconButton aria-label="delete">
+              {/* <DeleteIcon /> */}
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title="סנן רשימה">
+            <IconButton aria-label="filter list">
+              <FilterListIcon onClick={() => setShow(!showFilter)} />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Toolbar>
+      {showFilter && <div id="filter">
+        {filters.map((filter: any) => {
+          return (
+            <Filter id={filter.id} type={filter.type} name={filter.name} onChange={(v: any) => handleFilter(v, filter.id)} />
+          )
+        })}
+      </div>
+      }
+    </>
   );
 };
 
@@ -213,9 +225,10 @@ interface Props {
   count: number;
   page: number;
   rowsPerPage: number;
+  filters?: any;
 }
 
-export default function EnhancedTable({ rows, headCells, onSelect, header, onPaginationChange, count, page, rowsPerPage }: Props) {
+export default function EnhancedTable({ rows, headCells, onSelect, header, onPaginationChange, count, page, rowsPerPage, filters }: Props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('calories');
@@ -229,6 +242,7 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
 
   useEffect(() => {
     _pagination.sort = {}
+    _pagination.query = {};
   }, [])
   const handleRequestSort = async (property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -239,7 +253,6 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
     else {
       sort[property] = isAsc ? -1 : 1;
     }
-
     _pagination.sort = sort;
     _pagination.pageNo = 0;
     console.log(_pagination.sort);
@@ -299,10 +312,15 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
 
   const emptyRows = rowsPerPage ?? - Math.min(rowsPerPage ?? 0, rows.length - page ?? 0 * rowsPerPage ?? 0);
 
+  function handleFilter(filter: any, id: any) {
+    _pagination.query[id] = filter;
+    onPaginationChange(_pagination);
+  }
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} header={header} />
+        <EnhancedTableToolbar numSelected={selected.length} header={header} filters={filters} handleFilter={handleFilter} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -328,7 +346,7 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => onSelect(row)}
+                      onClick={(event: any) => onSelect(row)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}

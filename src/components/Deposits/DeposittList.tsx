@@ -32,7 +32,7 @@ export const DepositList = ({ userId }: any) => {
 
     function getData(_p: any) {
         _p.query = { userId: userId.id ?? '' };
-        depositService.paginator(_p).then(
+        depositService.paginator(_p,userId.id??null).then(
             res => {
                 if (res.data.docs) {
                     setPage(res.data.page-1);
@@ -71,6 +71,7 @@ export const DepositList = ({ userId }: any) => {
             onSelect={onselect}
             rows={Deposits}
             header="הפקדות"
+            filters={[]}
         />
     )
 }

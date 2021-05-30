@@ -14,6 +14,6 @@ export class PaginateOptions {
   limit?: number;
   pageSize: number = 5;
   pageNo: number = 1;
-  query:any;
+  query:any={};
 
 }
