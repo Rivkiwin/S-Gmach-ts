@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
+import './listScss.scss';
 import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -122,15 +123,18 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(1),
     },
+
     highlight:
       theme.palette.type === 'light'
         ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+          color: theme.palette.info.main,
+          backgroundColor: lighten(theme.palette.info.light, 0.85),
         }
         : {
           color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
+          backgroundColor: theme.palette.info.dark
+
+          ,
         },
     title: {
       flex: '1 1 100%',
@@ -157,7 +161,7 @@ const EnhancedTableToolbar = ({ numSelected, header, filters, handleFilter }: En
       >
         {numSelected > 0 ? (
           <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-            {numSelected} selected
+            {numSelected} נבחרו
           </Typography>
         ) : (
           <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
@@ -193,14 +197,19 @@ const EnhancedTableToolbar = ({ numSelected, header, filters, handleFilter }: En
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100%',
+      width: '95%',
+      margin: "auto",
+
     },
     paper: {
       width: '100%',
       marginBottom: theme.spacing(2),
     },
     table: {
-      minWidth: 750,
+      width: '100%',
+      "&[aria-checked=true]": {
+        backgroundColor: "blue"
+      }
     },
     visuallyHidden: {
       border: 0,
@@ -236,7 +245,6 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
   const [load, setLoad] = React.useState(false);
   // const [rows, setRows] = React.useState([..._rows]);
 
-  const [dense, setDense] = React.useState(false);
   const [_pagination, setPagination] = React.useState(new PaginateOptions());
   // const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -304,9 +312,7 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
 
   };
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
+
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
@@ -325,7 +331,7 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size='small'
             aria-label="enhanced table"
           >
             <EnhancedTableHead
@@ -346,17 +352,20 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
                   return (
                     <TableRow
                       hover
-                      onClick={(event: any) => onSelect(row)}
+                      onClick={(e) => handleClick(e, row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.name}
                       selected={isItemSelected}
+                      color="primary"
                     >
                       <TableCell align="right">
                         <Checkbox
                           checked={isItemSelected}
+                          onChange={(event: any) => onSelect(row)}
                           inputProps={{ 'aria-labelledby': labelId }}
+                          color="primary"
                         />
                       </TableCell>
                       {/* <TableCell component="th" id={labelId} scope="row" padding="none">
@@ -373,7 +382,7 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                <TableRow >
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -415,10 +424,7 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
             onChange={handleChangePage}
           />
         </div> */}
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
+      
     </div>
   );
 }

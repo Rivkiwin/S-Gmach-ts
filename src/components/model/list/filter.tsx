@@ -13,9 +13,9 @@ const Filter = ({ onChange, name, id, type }: any) => {
     return (
         <div className="filter inline mr-1">
             <FormControl className="formControl ">
-                {type == "date" && <DateController name={id} label={name} onChange={(e: any) => { let date = new Date(e.target.value); onChange({ $gte: e.target.value, $lte:getNextDay(date) }) }} />}
+                {type == "date" && <DateController  name={id} label={name} onChange={(e: any) => { let date = new Date(e.target.value); onChange({ $gte: e.target.value, $lte:getNextDay(date) }) }} />}
                 {(type == "string" || type == "email" || type == "number") &&
-                    <InputText name={id} type={type} label={name} onChange={(e: any) => onChange({ $regex: e.target.value.trim() })} />}
+                    <InputText  name={id} type={type} label={name} onChange={(e: any) => onChange({ $regex: e.target.value.trim() })} />}
             </FormControl>
             {/* <input type={type} onChange={(e) => onChange(e.target.value)}></input> */}
         </div>

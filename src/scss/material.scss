@@ -11,3 +11,11 @@
 .enableSorting .MuiTableSortLabel-iconDirectionAsc{
   display: none;
 }
+.MuiTableRow-root.Mui-selected{
+  color: #2196f3;
+  background-color: rgb(231, 243, 253) !important;
+}
+
+.MuiCheckbox-root {
+  color: #2196f3 !important;
+}
