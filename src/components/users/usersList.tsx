@@ -20,20 +20,19 @@ const filters = [
     { id: 'userName', name: "שם", type: "string" },
     { id: 'father_name', name: 'שם האב', type: "string" },
     { id: 'tz', name: 'ת"ז', type: "string" },
-    {id:'city',name:'עיר',type:'string'},
-    {id:'street',name:'רחוב',type:'string'},
-    {id:'createdAt',name:'תאריך יצירה',type:'date'},
-    {id:'updatedAt',name:'תאריך עדכון',type:'date'},
-    
+    { id: 'city', name: 'עיר', type: 'string' },
+    { id: 'street', name: 'רחוב', type: 'string' },
+    { id: 'createdAt', name: 'תאריך יצירה', type: 'date' },
+    { id: 'updatedAt', name: 'תאריך עדכון', type: 'date' },
+
 
 ]
 let headCells: HeadCells[] = [];
 const userService = new UserService();
 const fundService = new FundService();
 
-const UsersList = () => {
-    const { isShowing, toggle } = useModal();
-    const [open, setOpen] = useState(false);
+const UsersList = ({onSelect}:any) => {
+ 
     const [rowsPerPage, setRowsPerPage] = useState(4);
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(1);
@@ -41,19 +40,8 @@ const UsersList = () => {
     const [rows, setRows] = useState([]);
     const history = useHistory();
 
-    const add = async (data: any) => {
-        console.log(data);
-        let res = await userService.add(data);
-        console.log(res);
-        if (res.status == 200) {
-            toggle();
-            setOpen(true);
-        }
-    }
 
-    function onselect(user: any) {
-        history.push({ pathname: `/UserDetails/${user._id}` })
-    }
+   
     useEffect(() => {
         headCells = [{ id: "name", label: "שם", numeric: false, disablePadding: false },
         { id: "father_name", label: "שם האב", numeric: false, disablePadding: false },
@@ -91,7 +79,7 @@ const UsersList = () => {
             (res: any) => {
                 let users = res.data["docs"];
                 setPage(res.data.page - 1);
-                setCount(res.data.pages);
+                setCount(res.data.total);
                 setRowsPerPage(res.data.limit)
                 users = users.map((user: any) => {
                     let u: any =
@@ -99,11 +87,11 @@ const UsersList = () => {
                         name: `${user.last_name} ${user.first_name}`,
                         father_name: user.father_name,
                         status: UserStatus.find(s => s.value == user.status)?.label,
-                        vip: user.vip ? <CheckIcon/> :  <ClearIcon/>,
-                        allowed: user.allowed ? <CheckIcon/> : <ClearIcon/>,
+                        vip: user.vip ? <CheckIcon /> : <ClearIcon />,
+                        allowed: user.allowed ? <CheckIcon /> : <ClearIcon />,
                         tz: user.tz,
-                        city:user.city,
-                        street:user.street,
+                        city: user.city,
+                        street: user.street,
                         createdAt: user.createdAt.slice(0, 10),
                         updatedAt: user.updatedAt.slice(0, 10),
                         _id: user._id
@@ -120,29 +108,17 @@ const UsersList = () => {
     const newUser: User = new User();
 
     return (
-        <div>
-            <div className="w-90 m-u">
-                <h2 className="txt-blue inline">רשימת משתמשים</h2>
-                <Icon className="inline f-l" style={{ color: '#00bcd4c7', fontSize: 30 }} onClick={toggle}>add_circle</Icon>
-            </div>
-            <CreatUpdate isShowing={isShowing} hide={toggle} OnSubmit={add} type={"add"} header={"header"} rows={UserControllers} doc={newUser} />
-            <EnhancedTable
-                onPaginationChange={getUsers}
-                rows={rows}
-                onSelect={onselect}
-                headCells={headCells}
-                header={"רשימת חברים"}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                count={count}
-                filters={filters}
-            />
-            <Snackbar open={open} autoHideDuration={6000} >
-                <Alert onClose={() => setOpen(false)} severity="success">
-                    add success!
-                </Alert>
-            </Snackbar>
-
-        </div>)
+        <EnhancedTable
+            onPaginationChange={getUsers}
+            rows={rows}
+            onSelect={onSelect}
+            headCells={headCells}
+            header={"רשימת חברים"}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            count={count}
+            filters={filters}
+        />
+    )
 }
 export default UsersList;

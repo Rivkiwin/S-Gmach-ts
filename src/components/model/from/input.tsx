@@ -7,7 +7,7 @@ export class InputTextProps {
     label?: string;
     value?: any;
     required?: boolean;
-    ref?: any;
+    refInput?: any;
     onChange: any;
     type?: string;
     defaultVale?:any;

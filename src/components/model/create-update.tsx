@@ -9,6 +9,7 @@ import SelectController from './from/select';
 import DateController from './from/date';
 import { t } from './t';
 import { SHARE_ENV } from 'node:worker_threads';
+import TextArea from './from/texrArea';
 
 export interface controller {
     name: string,
@@ -69,12 +70,13 @@ const CreatUpdate = (({ isShowing, hide, OnSubmit, type, header, rows, doc }: Ap
                                 <div >
                                     {row.map((c) => {
                                         return (
-                                            <FormControl className="formControl" key={index}>
+                                            <FormControl className={`formControl ${c.type == "textArea"?'w-90 m-u':''}`} key={index}>
                                                 {c.type == "checkBox" && <CheckboxController name={c.name} label={c.label} value={"true"}  defaultVale={doc[c.name]} onChange={handleChange} />}
                                                 {c.type == "date" && <DateController name={c.name} label={c.label} defaultVale={doc[c.name]} value={doc[c.name]} onChange={handleChange} />}
                                                 {(c.type == "text" || c.type == "email" || c.type == "number") &&
                                                     <InputText name={c.name} defaultVale={doc[c.name]} type={c.type} required={c.required} label={c.label} onChange={handleChange} />}
                                                 {c.type == "select" && <SelectController name={c.name}    defaultValue={doc[c.name]} label={c.label} onChange={handleChange} options={c.options ?? []} />}
+                                                {c.type == "textArea" && <TextArea  name={c.name} defaultVale={doc[c.name]} type={c.type} required={c.required} label={c.label} onChange={handleChange}  />}
                                             </FormControl>
                                         )
 

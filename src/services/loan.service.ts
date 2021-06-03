@@ -5,9 +5,4 @@ export class LoanService extends BaseService {
     constructor() {
         super("loan");
     }
-
-    getByFund()
-    {
-
-    }
 }

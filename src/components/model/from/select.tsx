@@ -32,7 +32,6 @@ const SelectController = ({ name, label, onChange, options, value ,defaultValue}
             >
                 <option aria-label="None" value="" />
                 {options.map(option => {
-                    debugger
                     return (
                         <option value={option.value}>{option.label} </option>
                     )

@@ -81,12 +81,12 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     <TableHead>
       <TableRow>
         <TableCell align="right">
-          <Checkbox
+          {/* <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{ 'aria-label': 'select all desserts' }}
-          />
+          /> */}
         </TableCell>
         {props.headCells.map((headCell) => (
           <TableCell
@@ -320,11 +320,12 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
 
   function handleFilter(filter: any, id: any) {
     _pagination.query[id] = filter;
+    _pagination.page=0;
     onPaginationChange(_pagination);
   }
 
   return (
-    <div className={classes.root}>
+    <div id="list" className={classes.root}>
       <Paper className={classes.paper}>
         <EnhancedTableToolbar numSelected={selected.length} header={header} filters={filters} handleFilter={handleFilter} />
         <TableContainer>

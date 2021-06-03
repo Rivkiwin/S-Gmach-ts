@@ -1,13 +1,24 @@
-.filter {
-  width: 14%;
-  min-width: 146px;
-}
-.MuiFormControl-root {
-  width: 100% !important;
-}
-.MuiFormControl-root {
-  direction: ltr;
-}
-.MuiTableContainer-root {
-  max-height: 62vh;
+#list {
+  .filter {
+    width: 146px;
+  }
+  #filter {
+    margin-bottom: 1%;
+  }
+  .MuiFormControl-root {
+    width: 100% !important;
+  }
+  .MuiTablePagination-root:last-child {
+    direction: ltr;
+  }
+  .MuiTableContainer-root {
+    max-height: 62vh;
+  }
+  .MuiTableCell-sizeSmall {
+    min-width: 113px;
+    box-sizing: border-box;
+  }
+  .MuiTablePagination-actions {
+    min-width: 100px;
+  }
 }
