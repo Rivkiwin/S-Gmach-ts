@@ -5,8 +5,9 @@ import useModal from '../model/useModel'
 import UsersList from '../users/usersList'
 import HighlightOffSharpIcon from '@material-ui/icons/HighlightOffSharp';
 import { t } from '../model/t'
+import { LoanService } from '../../services/loan.service'
 
-
+const loanService = new LoanService();
 const AddBorrower = ({ newLoan }: any) => {
     const [Borrowers, setBorrowers] = useState<any>({});
     const [Selected, setSelected] = useState<any>({});
@@ -26,7 +27,10 @@ const AddBorrower = ({ newLoan }: any) => {
         setSelected(b);
     }
     function add() {
-        console.log(newLoan)
+        console.log(newLoan);
+        loanService.add(newLoan).then(
+            res => console.log(res)
+        )
     }
 
     function addBorrowers() {
@@ -71,7 +75,7 @@ const AddBorrower = ({ newLoan }: any) => {
                                 />
                             </Box>
                             <Box className="inline mr-1" width="50%">
-                                <TextField fullWidth  defaultValue={Borrowers[b].remarks} variant="outlined"
+                                <TextField fullWidth defaultValue={Borrowers[b].remarks} variant="outlined"
                                     name={'remarks'}
                                     id="outlined-helperText"
                                     size="small"

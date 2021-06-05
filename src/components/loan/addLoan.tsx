@@ -20,28 +20,38 @@ const AddLoan = ({ isShowing, toggle }: any) => {
     const [month, setMonth] = useState(1);
     const [dateEnd, setDateEnd] = useState(new Date());
     const [trigger, setTrigger] = useState(false);
+    const [AutomaticDivision, setDivision] = useState(false);
     const [monthStart, setMonthStart] = useState(new Date());
 
-    let numMonthRef :any= {};
-    let endRef:any = {};
+    const refs: any = {}
+    let monthlyRepayments: number=0;
+    let numMonthRef: any = {};
+
+    
+    
     function onMonthChange(month: number) {
-
+        newLoan.numMonth = month;
+        if (refs.endDate) {
+            let endD = new Date(newLoan.dateStart);
+            endD.setMonth(endD.getMonth() + month)
+            refs.endDate.value = endD.toISOString().slice(0, 10);
+        }
     }
-    function setRef(ref: any) {
-
-        endRef = ref;
+    function setRef(ref: any,name:string) {
+        refs[name]=ref;
     }
+
     useEffect(() => {
         newLoan.dateStart = monthStart;
         let endD = new Date(monthStart);
         debugger
         endD.setMonth(endD.getMonth() + 1);
         newLoan.numMonth = 1;
-        if (endRef && numMonthRef) {
-            endRef.value = endD.toISOString().slice(0,10);
-            numMonthRef.value='1'
+        if (refs.endDate && numMonthRef) {
+            refs.endDate.value = endD.toISOString().slice(0, 10);
+            numMonthRef.value = '1'
         }
-   
+
         setTrigger(!trigger);
 
 
@@ -53,8 +63,6 @@ const AddLoan = ({ isShowing, toggle }: any) => {
     };
     function setEnd(e: any) {
         let endDate = new Date(e.target.value);
-        console.log(endRef);
-        debugger
         endDate.setDate(newLoan.dateStart.getDate());
         e.target.value = endDate.toISOString().split('T')[0];
         setTrigger(!trigger);
@@ -63,6 +71,7 @@ const AddLoan = ({ isShowing, toggle }: any) => {
     useEffect(() => {
         let endDate = dateEnd;
         var months;
+        console.log(refs)
         months = (endDate.getFullYear() - newLoan.dateStart.getFullYear()) * 12;
         months -= newLoan.dateStart.getMonth();
         months += endDate.getMonth();
@@ -80,7 +89,7 @@ const AddLoan = ({ isShowing, toggle }: any) => {
                                 <span aria-hidden="true">&times;</span></Button>
                         </div>
                         <form id="form" className={"from w-90 m-u"} noValidate autoComplete="off">
-                            <FormControl >
+                            <FormControl className="mr-1">
                                 <DateController
                                     name={'startDate'}
                                     label={'תאריך התחלה'}
@@ -103,7 +112,7 @@ const AddLoan = ({ isShowing, toggle }: any) => {
                                             min: 1,
                                         }
                                     }}
-                                    onChange={(e) => newLoan.numMonth = +e.target.value}
+                                    onChange={(e) => { onMonthChange(+e.target.value) }}
                                     required={true}
                                 />
                             </FormControl>
@@ -118,7 +127,7 @@ const AddLoan = ({ isShowing, toggle }: any) => {
                                                     {c.type == "textArea" && <TextArea name={c.name} defaultVale={newLoan[c.name]} type={c.type} required={c.required} label={c.label} onChange={handleChange} />}
                                                     {c.type == "date" && <DateController name={c.name} label={c.label} defaultVale={newLoan[c.name]} value={newLoan[c.name]} onChange={handleChange} />}
                                                     {(c.type == "text" || c.type == "email" || c.type == "number") &&
-                                                        <InputText name={c.name} defaultVale={newLoan[c.name]} type={c.type} required={c.required} label={c.label} onChange={handleChange} />}
+                                                        <InputText refInput={setRef} name={c.name} defaultVale={newLoan[c.name]} type={c.type} required={c.required} label={c.label} onChange={handleChange} />}
                                                     {c.type == "select" && <SelectController name={c.name} defaultValue={newLoan[c.name]} label={c.label} onChange={handleChange} options={c.options ?? []} />}
                                                 </FormControl>
                                             )

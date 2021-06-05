@@ -15,7 +15,7 @@ export class Loan {
     score: number = 0;
     status: string = '';
     type: string = "signal";
-
+    monthlyRepayments:number=5000;
 }
 
 export const loanControllers = [

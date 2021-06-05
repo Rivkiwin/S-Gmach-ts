@@ -2,6 +2,7 @@ import { Icon, Snackbar } from "@material-ui/core"
 import { Alert } from "@material-ui/lab"
 import React, { useEffect, useState } from "react"
 import { PaginateOptions } from "../../modles/PaginateOptions"
+import { LoanService } from "../../services/loan.service"
 import CreatUpdate from "../model/create-update"
 import EnhancedTable from "../model/list/baselist"
 import useModal from "../model/useModel"
@@ -14,13 +15,16 @@ const headCells: any[] = [
     { id: "dateStart", label: "תאריך התחלה", numeric: false, disablePadding: false },
     { id: "amount", label: "סכום", numeric: true, disablePadding: false },
     { id: "paid", label: "סכום שהחזר", numeric: true, disablePadding: false },
+    { id: "monthlyRepayments", label: "החזר חודשי", numeric: true, disablePadding: false },
     { id: "numMonth", label: "מספר חודשים", numeric: true, disablePadding: false },
     { id: "numPayments", label: "מספר תשלומים", numeric: true, disablePadding: false },
 ];
 const filters:any[]=[];
+const loanService = new LoanService();
+
 const LoanList = () => {
     const { toggle, isShowing } = useModal();
-    const [rows, setHRows] = useState<any[]>([])
+    const [rows, setRows] = useState<any[]>([])
     const [paginator, sePaginator] = useState(new PaginateOptions());
 
     useEffect(() => {
@@ -28,12 +32,14 @@ const LoanList = () => {
     }, [])
 
     function getLoans() {
-
+        loanService.get().then(
+            res=>console.log(res)
+        )
     }
 
     function onselect(id:string)
     {
-
+     
     }
 
     return (

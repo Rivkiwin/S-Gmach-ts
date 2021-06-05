@@ -26,7 +26,7 @@ const DateController = ({ label, value, onChange, name, refInput }: InputTextPro
   return (
     <TextField
       id="date"
-      inputRef={refInput}
+      inputRef={input=>{if(refInput)refInput(input,name)}}
       name={name}
       onChange={onChange}
       label={label}

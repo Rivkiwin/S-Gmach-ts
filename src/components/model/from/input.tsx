@@ -14,7 +14,7 @@ export class InputTextProps {
 }
 
 
-const InputText = ({ name, label, value, required, onChange, type,defaultVale }: InputTextProps) => {
+const InputText = ({ name, label, value, required, onChange, type,defaultVale,refInput }: InputTextProps) => {
 
     return (
 
@@ -26,6 +26,7 @@ const InputText = ({ name, label, value, required, onChange, type,defaultVale }:
             type={type}
             onChange={onChange}
             required={required}
+            inputRef={input=>{ if(refInput)refInput(input,name)}}
         >
         </TextField>
     )
