@@ -7,11 +7,18 @@
 
 body {
   direction: rtl;
-  background: #eeeeee5e;;}
+  background-color: #e1f5fe5c !important;}
 .cal {
   direction: rtl;
   display: inline-block;
   margin: 5px;
+}
+
+.bg-gray{
+  background-color: #35424a;
+}
+.color-gray{
+  color: #35424a;
 }
 .cal span {
   display: inline;

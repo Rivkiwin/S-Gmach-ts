@@ -16,6 +16,7 @@
   background-color: rgb(231, 243, 253) !important;
 }
 
+
 .MuiCheckbox-root {
   color: #2196f3 !important;
 }
@@ -23,4 +24,10 @@
   vertical-align: unset !important; 
   margin-top: 2% !important;
 
+}
+.MuiToolbar-regular {
+  direction: ltr !important;
+}
+.MuiAppBar-colorPrimary{
+  background-color: #35424a !important;
 }

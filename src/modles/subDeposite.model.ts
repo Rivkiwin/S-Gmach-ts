@@ -1,4 +1,5 @@
 import { controller } from "../components/model/create-update";
+import DepositService from "../services/deposit.service";
 import FundService from "../services/fund.service";
 import { PaymentsMethod } from "./paymentsMethod.model";
 const types = [
@@ -7,7 +8,7 @@ const types = [
     { value: "monthly", label: "חודשי" },
 ]
 
-export class Deposit {
+export class SubDeposit {
     amount: number = 0;
     type: string = "";
     payment_method: string = "cash";
@@ -16,17 +17,17 @@ export class Deposit {
 }
 
 
-export const GetDepositControllers = (id: string) => {
-    let fundService = new FundService();
-    let options: any[] = []
-    fundService.getByUser(id).then(
+export const GetSubDepositControllers = (id: string) => {
+    let depositService = new DepositService();
+    let options: any[] = [];
+    depositService.get({isOptions:true,}).then(
         res => {
             debugger
-            if (res.data.success) {
-                res.data.funds.map((f: any) => {
+            if (res) {
+                res.data.map((d: any) => {
                     debugger
-                    console.log(f)
-                    options.push({ label: f.fundName, value: f.uf.fundId });
+                    console.log(d)
+                    options.push({ label: d.depositName, value: d._id });
                     console.log(options)
                 }
                 )

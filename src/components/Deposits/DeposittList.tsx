@@ -9,6 +9,7 @@ import EnhancedTable from '../model/list/baselist';
 const headCells: HeadCells[] = [
     { id: "userName", label: "שם המפקיד", numeric: false, disablePadding: true },
     { id: "fundName", label: "קרן", numeric: false, disablePadding: false },
+    { id: "depositName", label: "שם ההפקדה", numeric: false, disablePadding: false },
     { id: "amount", label: "סכום", numeric: true, disablePadding: false },
     { id: "createdAt", label: "תאריך יצירה", numeric: false, disablePadding: true },
     { id: "updatedAt", label: "תאריך עדכון", numeric: false, disablePadding: false },
@@ -31,17 +32,18 @@ export const DepositList = ({ userId }: any) => {
     }, []);
 
     function getData(_p: any) {
-        _p.query = { userId: userId.id ?? '' };
-        depositService.paginator(_p,userId.id??null).then(
+        // _p.query = { userId: userId.id ?? '' };
+        depositService.paginator(_p, null).then(
             res => {
                 if (res.data.docs) {
-                    setPage(res.data.page-1);
+                    setPage(res.data.page - 1);
                     setCount(res.data.total);
                     setRowsPerPage(res.data.limit);
                     let list = res.data.docs.map((w: any) => {
                         return {
                             userName: w.userName,
                             fundName: w.fundName,
+                            depositName: w.depositName,
                             amount: w.amount,
                             createdAt: w.createdAt.slice(0, 10),
                             updatedAt: w.updatedAt.slice(0, 10),
@@ -56,13 +58,13 @@ export const DepositList = ({ userId }: any) => {
         )
     }
 
-    function onselect(id: string) {
-        console.log(id);
+    function onselect(deposit: any) {
+        console.log(deposit._id);
     }
 
     return (
         <EnhancedTable
-        page={page}
+            page={page}
             onPaginationChange={getData}
             count={count}
             rowsPerPage={rowsPerPage}

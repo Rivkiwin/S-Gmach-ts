@@ -1,13 +1,14 @@
 import React from 'react'
 import { creatDetailsMod, details } from '../../modles/details.modle';
 import Details from '../model/details';
-import Toolbar from './toolbar';
+import PersistentDrawerRight from './sideBar';
+
 
 
 const HomePage = () => {
   return (
     <div className="homePage">
-      <Toolbar />
+   < PersistentDrawerRight/>
     </div>
   )
 }

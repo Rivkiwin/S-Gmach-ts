@@ -348,12 +348,13 @@ export default function EnhancedTable({ rows, headCells, onSelect, header, onPag
             <TableBody>
               {rows.length > 0 && stableSort(rows, getComparator(order, orderBy))
                 .map((row: any, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  console.log(row.name)
+                  const isItemSelected = isSelected(row._id);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow
                       hover
-                      onClick={(e) => handleClick(e, row.name)}
+                      onClick={(e) => handleClick(e, row._id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}

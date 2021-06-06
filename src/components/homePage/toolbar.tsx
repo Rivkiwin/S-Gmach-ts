@@ -5,16 +5,16 @@ import useModal from '../model/useModel'
 import SideBar from './sideBar';
 
 
-const Toolbar = () => {
-    const { toggle, isShowing } = useModal();
-    return (
-        <div className="Toolbar">
-            {/* <GoThreeBars onClick={toggle} /> */}
-            <Button onClick={toggle}>{"nav"}</Button>
+// const Toolbar = () => {
+//     const { toggle, isShowing } = useModal();
+//     return (
+//         <div className="Toolbar">
+//             {/* <GoThreeBars onClick={toggle} /> */}
+//             <Button onClick={toggle}>{"nav"}</Button>
 
-            <SideBar hide={toggle} isShowing={isShowing} />
-        </div>
+//             {/* <SideBar hide={toggle} isShowing={isShowing} /> */}
+//         </div>
 
-    )
-}
-export default Toolbar
+//     )
+// }
+// export default Toolbar
