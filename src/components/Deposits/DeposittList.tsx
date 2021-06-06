@@ -49,7 +49,6 @@ export const DepositList = ({ userId }: any) => {
                         }
                     }
                     );
-                    debugger
                     setDeposits(list);
                 }
 

@@ -1,6 +1,5 @@
 import { Button, FormControl, Snackbar, TextField } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import { AnyAaaaRecord } from "node:dns";
 import React, { useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom";
 import { Loan, loanControllers } from "../../modles/loan.modle"
@@ -9,8 +8,6 @@ import DateController from "../model/from/date";
 import InputText from "../model/from/input";
 import SelectController from "../model/from/select";
 import TextArea from "../model/from/texrArea";
-import { t } from "../model/t";
-import UsersList from "../users/usersList";
 import AddBorrower from "./addBorrower";
 
 let newLoan: any = new Loan();
@@ -20,15 +17,11 @@ const AddLoan = ({ isShowing, toggle }: any) => {
     const [month, setMonth] = useState(1);
     const [dateEnd, setDateEnd] = useState(new Date());
     const [trigger, setTrigger] = useState(false);
-    const [AutomaticDivision, setDivision] = useState(false);
+    const [AutomaticDivision, setDivision] = useState(true);
     const [monthStart, setMonthStart] = useState(new Date());
+    const [refs, setRefs] = useState<any>({});
+    const _refs: any = {}
 
-    const refs: any = {}
-    let monthlyRepayments: number=0;
-    let numMonthRef: any = {};
-
-    
-    
     function onMonthChange(month: number) {
         newLoan.numMonth = month;
         if (refs.endDate) {
@@ -36,48 +29,69 @@ const AddLoan = ({ isShowing, toggle }: any) => {
             endD.setMonth(endD.getMonth() + month)
             refs.endDate.value = endD.toISOString().slice(0, 10);
         }
+        if (refs.numPayments && month < refs.numPayments.value) {
+            refs.numPayments.value = month;
+            refs.monthlyRepayments.value = newLoan.amount / refs.numPayments.value;
+        }
     }
-    function setRef(ref: any,name:string) {
-        refs[name]=ref;
+
+    const setRef = (ref: any) => {
+        if (ref)
+            refs[ref?.name] = ref;
+        // console.log("ddd")
+        // setRefs({..._refs});
     }
+    useEffect(() => {
+        setRefs(_refs);
+        console.log(_refs)
+    }, [])
 
     useEffect(() => {
-        newLoan.dateStart = monthStart;
-        let endD = new Date(monthStart);
-        debugger
-        endD.setMonth(endD.getMonth() + 1);
-        newLoan.numMonth = 1;
-        if (refs.endDate && numMonthRef) {
-            refs.endDate.value = endD.toISOString().slice(0, 10);
-            numMonthRef.value = '1'
+        try {
+            newLoan.dateStart = monthStart;
+            let endD = new Date(monthStart);
+            endD.setMonth(endD.getMonth() + 1);
+            newLoan.numMonth = 1;
+            if (refs.endDate && refs.month) {
+                refs.endDate.value = endD.toISOString().slice(0, 10);
+                refs.month.value = '1'
+                refs.monthlyRepayments.value = newLoan.amount;
+                refs.numPayments.value = '1';
+            }
         }
-
-        setTrigger(!trigger);
-
-
+        catch { }
     }, [monthStart])
 
 
     const handleChange = (event: any) => {
+        if (event.target.name == "numPayments") {
+            if (event.target.value > refs.month.value || event.target.value <= 0) {
+                event.target.value = refs.month.value;
+            }
+            refs.monthlyRepayments.value = newLoan.amount / + refs.numPayments.value;
+        }
         newLoan[event.target.name] = event.target.value;
     };
+
     function setEnd(e: any) {
-        let endDate = new Date(e.target.value);
-        endDate.setDate(newLoan.dateStart.getDate());
-        e.target.value = endDate.toISOString().split('T')[0];
-        setTrigger(!trigger);
+        try {
+            let endDate = new Date(e.target.value);
+            endDate.setDate(newLoan.dateStart.getDate());
+            e.target.value = endDate.toISOString().split('T')[0];
+            let months = (endDate.getFullYear() - newLoan.dateStart.getFullYear()) * 12;
+            months -= newLoan.dateStart.getMonth();
+            months += endDate.getMonth();
+            if (refs.month)
+                refs.month.value = months <= 0 ? 1 : months;
+            if (refs.numPayments && refs.month.value < refs.numPayments.value) {
+                refs.numPayments.value = months <= 0 ? 1 : months;
+                refs.monthlyRepayments.value = newLoan.amount / refs.numPayments.value;
+            }
+        }
+        catch { }
     }
 
-    useEffect(() => {
-        let endDate = dateEnd;
-        var months;
-        console.log(refs)
-        months = (endDate.getFullYear() - newLoan.dateStart.getFullYear()) * 12;
-        months -= newLoan.dateStart.getMonth();
-        months += endDate.getMonth();
-        console.log(months <= 0 ? 1 : months);
-        setDateEnd(endDate);
-    }, [dateEnd])
+
 
     return (
         isShowing ? ReactDOM.createPortal(
@@ -97,7 +111,11 @@ const AddLoan = ({ isShowing, toggle }: any) => {
                                     onChange={(e: any) => setMonthStart(new Date(e.target.value))} />
                             </FormControl>
                             <FormControl className="mr-1">
-                                <DateController refInput={setRef} name={'endDate'} label={'תאריך סיום'} value={dateEnd} defaultVale={dateEnd} onChange={setEnd} />
+                                <DateController
+                                    refInput={setRef}
+                                    name={'endDate'}
+                                    label={'תאריך סיום'}
+                                    value={dateEnd} defaultVale={dateEnd} onChange={setEnd} />
                             </FormControl>
                             <FormControl className="mr-1">
                                 <TextField defaultValue={newLoan.numMonth} variant="outlined"
@@ -105,7 +123,25 @@ const AddLoan = ({ isShowing, toggle }: any) => {
                                     id="outlined-helperText"
                                     size="small"
                                     label={"מספר חודשים"}
-                                    inputRef={input => (numMonthRef = input)}
+                                    inputRef={input => setRef(input)}
+                                    type={'number'}
+                                    InputProps={{
+                                        inputProps: {
+                                            min: 1,
+                                        }
+                                    }}
+                                    onChange={(e) => { onMonthChange(+e.target.value) }}
+                                    required={true}
+                                />
+                            </FormControl>
+                            <FormControl className="mr-1">
+                                <TextField defaultValue={newLoan.amount} variant="outlined"
+                                    name={"monthlyRepayments"}
+                                    disabled
+                                    id="outlined-helperText"
+                                    size="small"
+                                    label={"תשלום חודשי"}
+                                    inputRef={(input) => setRef(input)}
                                     type={'number'}
                                     InputProps={{
                                         inputProps: {
@@ -135,7 +171,7 @@ const AddLoan = ({ isShowing, toggle }: any) => {
                                         })}
                                     </div>)
                             })}
-                            <AddBorrower newLoan={newLoan} />
+                            {<AddBorrower newLoan={newLoan} setDivision={setDivision} AutomaticDivision={AutomaticDivision} refAmount={refs.amount} />}
                         </form>
                     </div>
                     <Snackbar open={open} autoHideDuration={6000} >

@@ -26,7 +26,7 @@ const InputText = ({ name, label, value, required, onChange, type,defaultVale,re
             type={type}
             onChange={onChange}
             required={required}
-            inputRef={input=>{ if(refInput)refInput(input,name)}}
+            inputRef={input=>{if(refInput) refInput(input)}}
         >
         </TextField>
     )

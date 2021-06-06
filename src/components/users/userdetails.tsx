@@ -45,7 +45,6 @@ const UserDetails = () => {
         setDepositController(dControllers);
         const WControllers = GetWithdrawalControllers(id);
         console.log(WControllers);
-        debugger;
         setWithdrawalControllers(WControllers);
         withdrawalService.get({ userId: id }).then(
             res => {

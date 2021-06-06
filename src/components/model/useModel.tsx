@@ -13,9 +13,7 @@ const useModal = () => {
     setIsShowing2(!isShowing2);
   }
   function toggle3() {
-    debugger
     setIsShowing3(!isShowing3);
-    debugger
   }
   function toggle4() {
     setIsShowing4(!isShowing4);

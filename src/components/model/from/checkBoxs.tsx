@@ -7,10 +7,10 @@ import { InputTextProps } from "./input";
 
  
 
-const CheckboxController = ({ label, name, onChange,value }: InputTextProps) => {
+const CheckboxController = ({ label, name, onChange,value ,defaultVale}: InputTextProps) => {
   return (
     <FormControlLabel
-      control={<Checkbox name={name} onChange={onChange} value={value} />}
+      control={<Checkbox checked={defaultVale==value} name={name} onChange={(e)=> {value=e.target.checked; onChange(e)}} value={value} />}
       label={label}
     />
   );
