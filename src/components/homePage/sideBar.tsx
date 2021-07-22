@@ -168,7 +168,7 @@ export default function PersistentDrawerRight() {
                 <List>
                     {routers.map((route, index) => {
                        return (<ListItem button key={index}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                            <ListItemIcon>{route.icon}</ListItemIcon>
                             <ListItemText primary={<Link key={route.path} to={route.path} >{route.name}</Link>} ></ListItemText>
                         </ListItem>)
                     })}

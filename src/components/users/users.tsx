@@ -58,7 +58,7 @@ const Users = () => {
     return (
         <div>
             <div className="w-90 m-u">
-                <h2 className="txt-blue inline">רשימת משתמשים</h2>
+                <h2 className="txt-blue inline">משתמשים</h2>
                 <Icon className="inline f-l" style={{ color: '#00bcd4c7', fontSize: 30 }} onClick={toggle}>add_circle</Icon>
             </div>
             <CreatUpdate isShowing={isShowing} hide={toggle} OnSubmit={add} type={"add"} header={"header"} rows={UserControllers} doc={newUser} />

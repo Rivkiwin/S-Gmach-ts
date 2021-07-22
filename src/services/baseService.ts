@@ -5,15 +5,14 @@ import axios from "axios";
 import { PaginateOptions } from "../modles/PaginateOptions";
 
 export class BaseService {
-    protected baseUrl = "http://localhost:5000/";
+    protected baseUrl = process.env.PORT?"https://super--gmach.herokuapp.com/":"http://localhost:5000/";
     protected path: string;
 
     constructor(path: string) {
         this.path = this.baseUrl + path;
     }
-
-    async get(query?:any) {
-        let res = await axios.get(`${this.path}`,{params:{query:query}});
+    async get(query?:any,isOption?:any) {
+        let res = await axios.get(`${this.path}`,{params:{query:query,isOption:isOption}});
         return res;
     }
     async paginator(paginator:PaginateOptions,userId:any) {

@@ -37,7 +37,7 @@ export const GetDepositControllers = (id: string) => {
         [
             { name: "type", label: "סוג", type: "select", required: true, options: [...types] },
             { name: "depositName", label: "שם ההפקדה", type: "text", required: true },
-            { name: " payment_method", label: "צורת הפקדה", type: "select", required: true , options: [...PaymentsMethod]},
+            { name: "payment_method", label: "צורת הפקדה", type: "select", required: true , options: [...PaymentsMethod]},
             { name: "fundId", label: "עבור קרן", type: "select", required: true, options: options },
         ]
     ]

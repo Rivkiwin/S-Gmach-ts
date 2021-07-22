@@ -6,3 +6,4 @@ export class LoanService extends BaseService {
         super("loan");
     }
 }
+export const loanService=new LoanService();

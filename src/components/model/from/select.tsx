@@ -23,6 +23,7 @@ const SelectController = ({ name, label, onChange, options, value ,defaultValue}
                 native
                 value={value}
                 label={label}
+                name={name}
                 onChange={(e)=>{debugger;onChange(e)}}
                 defaultValue={defaultValue}
                 inputProps={{

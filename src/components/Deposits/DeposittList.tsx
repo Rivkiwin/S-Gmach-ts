@@ -1,5 +1,6 @@
 import { Stats } from 'node:fs';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { HeadCells } from '../../modles/headCells.model';
 import { PaginateOptions } from '../../modles/PaginateOptions';
 import { Status } from '../../modles/status';
@@ -23,6 +24,7 @@ export const DepositList = ({ userId }: any) => {
     const [rowsPerPage, setRowsPerPage] = useState(4);
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(1);
+    const history = useHistory();
 
     useEffect(() => {
         Paginator.query = { userId: userId.id ?? '' };
@@ -60,6 +62,7 @@ export const DepositList = ({ userId }: any) => {
 
     function onselect(deposit: any) {
         console.log(deposit._id);
+        history.push({ pathname: `/deposit/${deposit._id}`, state: { deposit: deposit } })
     }
 
     return (

@@ -3,7 +3,7 @@ import { Alert } from "@material-ui/lab";
 import React, { useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom";
 import { Loan, loanControllers } from "../../modles/loan.modle"
-import CheckboxController from "../model/from/checkBoxs";
+import CheckboxController from "../model/from/checkBox";
 import DateController from "../model/from/date";
 import InputText from "../model/from/input";
 import SelectController from "../model/from/select";

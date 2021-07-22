@@ -1,3 +1,4 @@
+import DepositService from "../services/deposit.service";
 import FundService from "../services/fund.service";
 import { PaymentsMethod } from "./paymentsMethod.model";
 import { Status } from "./status";
@@ -8,22 +9,22 @@ export class Withdrawal {
     fundId: string = '';
     userId: string = '';
     status: string = '';
+    depositId:string='';
     cnt: number = 1;
 }
 
 export const GetWithdrawalControllers = (id: string) => {
-    let fundService = new FundService();
+    let depositService = new DepositService();
     let options: any[] = []
-    fundService.getByUser(id).then(
+    depositService.get({userId:id},true).then(
         res => {
             debugger
-            if (res.data.success) {
-                res.data.funds.map((f: any) => {
+            if (res.data) {
+                res.data.docs.map((d: any) => {
                     debugger
-                    console.log(f);
+                    console.log(d);
                     debugger
-                    console.log(f.uf.balance - f.futureWithdrawals, "cccc")
-                    options.push({ label: `${f.fundName} (${f.uf.balance - f.futureWithdrawals})`, value: f.uf.fundId });
+                    options.push({ label: `${d.depositName} (${d.amount})`, value: d._id });
                     console.log(options)
                 }
                 )
@@ -34,7 +35,7 @@ export const GetWithdrawalControllers = (id: string) => {
         [
             { name: "amount", label: "סכום", type: "number", required: true },
             { name: "payment_method", label: "צורת משיכה", type: "select", required: true, options: [...PaymentsMethod] },
-            { name: "fundId", label: "מקרן", type: "select", required: true, options: options },
+            { name: "depositId", label: "מהפקדה", type: "select", required: true, options: options },
             { name: "date", label: "תאריך", type: "date", required: true, options: options },
             { name: "cnt", label: "כפול", type: "number", required: true },
             { name: "status", label: "סטטוס", type: "select", required: true, options: Status },

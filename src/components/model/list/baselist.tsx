@@ -165,7 +165,7 @@ const EnhancedTableToolbar = ({ numSelected, header, filters, handleFilter }: En
           </Typography>
         ) : (
           <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-            {header}
+            {/* {header} */}
           </Typography>
         )}
         {numSelected > 0 ? (

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react'
 import { Box, Button, Icon, TextField } from '@material-ui/core'
 import ReactDOM from 'react-dom'
@@ -5,11 +7,10 @@ import useModal from '../model/useModel'
 import UsersList from '../users/usersList'
 import HighlightOffSharpIcon from '@material-ui/icons/HighlightOffSharp';
 import { t } from '../model/t'
-import { LoanService } from '../../services/loan.service'
-import CheckboxController from '../model/from/checkBoxs'
+import { loanService, LoanService } from '../../services/loan.service'
+import CheckboxController from '../model/from/checkBox'
 import { AnyCnameRecord } from 'node:dns'
 
-const loanService = new LoanService();
 const AddBorrower = ({ newLoan, AutomaticDivision, setDivision, refAmount }: any) => {
     const [Borrowers, setBorrowers] = useState<any>({});
     const [Selected, setSelected] = useState<any>({});
@@ -22,6 +23,8 @@ const AddBorrower = ({ newLoan, AutomaticDivision, setDivision, refAmount }: any
         else {
             b[user._id] = {
                 name: user.name,
+                userId:user._id,
+                status:"valid"
             }
         }
         setSelected(b);
@@ -29,10 +32,15 @@ const AddBorrower = ({ newLoan, AutomaticDivision, setDivision, refAmount }: any
 
     useEffect(() => {
         setAmountForBorrower({ ...Borrowers });
-    }, [AutomaticDivision])
+    }, [AutomaticDivision]);
+
     function add() {
         delete newLoan.monthlyRepayments;
-        console.log(newLoan);
+        let doc:any={};
+        doc.loan=newLoan;
+        doc.borrowers=Borrowers;
+        console.log(doc);
+        loanService.add(doc);
         // loanService.add(newLoan).then(
         //     res => console.log(res)
         // )

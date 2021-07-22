@@ -12,6 +12,12 @@ export class DepositService extends BaseService {
         let res=await axios.get(`${this.baseUrl}deposit/getByUser/${id}`);
         return res
     }
+
+    async GetSubDeposits(depositId:string,paginate:any)
+    {
+        let res=await axios.get(`subDeposit/${depositId}`,{params:paginate});
+        return res;
+    }
 }
 
 export default DepositService

@@ -3,8 +3,8 @@ import { Button, createStyles, FormControlLabel, FormLabel, Input, InputLabel, m
 import ReactDOM from 'react-dom';
 import { FormControl } from '@material-ui/core';
 import InputText from './from/input';
-import FormCheckBox from './from/checkBoxs';
-import CheckboxController from './from/checkBoxs';
+import FormCheckBox from './from/checkBox';
+import CheckboxController from './from/checkBox';
 import SelectController from './from/select';
 import DateController from './from/date';
 import { t } from './t';

@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Icon, Snackbar } from "@material-ui/core"
 import { Alert } from "@material-ui/lab"
 import React, { useEffect, useState } from "react"
+import { Loan } from "../../modles/loan.modle"
 import { PaginateOptions } from "../../modles/PaginateOptions"
-import { LoanService } from "../../services/loan.service"
+import { Status } from "../../modles/status"
+import { loanService, LoanService } from "../../services/loan.service"
 import CreatUpdate from "../model/create-update"
 import EnhancedTable from "../model/list/baselist"
 import useModal from "../model/useModel"
@@ -15,12 +19,11 @@ const headCells: any[] = [
     { id: "dateStart", label: "תאריך התחלה", numeric: false, disablePadding: false },
     { id: "amount", label: "סכום", numeric: true, disablePadding: false },
     { id: "paid", label: "סכום שהחזר", numeric: true, disablePadding: false },
-    { id: "monthlyRepayments", label: "החזר חודשי", numeric: true, disablePadding: false },
+    { id: "monthlyRepayments", label: "החזר חודשי משוער", numeric: true, disablePadding: false },
     { id: "numMonth", label: "מספר חודשים", numeric: true, disablePadding: false },
     { id: "numPayments", label: "מספר תשלומים", numeric: true, disablePadding: false },
 ];
-const filters:any[]=[];
-const loanService = new LoanService();
+const filters: any[] = [];
 
 const LoanList = () => {
     const { toggle, isShowing } = useModal();
@@ -32,14 +35,27 @@ const LoanList = () => {
     }, [])
 
     function getLoans() {
-        loanService.get().then(
-            res=>console.log(res)
+        loanService.paginator(paginator, null).then(
+            res => {
+                let data = res.data.docs.map((loan: Loan) => {
+                    return {
+                        type: loan.type,
+                        status: Status.find(s => s.value === loan.status)?.label,
+                        dateStart: loan.dateStart,
+                        amount: loan.amount,
+                        paid: loan.paid,
+                        monthlyRepayments: loan.amount/loan.numPayments,
+                        numMonth: loan.numMonth,
+                        numPayments: loan.numPayments
+                    }
+                });;
+                setRows(data);
+            }
         )
     }
 
-    function onselect(id:string)
-    {
-     
+    function onselect(id: string) {
+
     }
 
     return (

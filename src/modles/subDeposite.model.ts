@@ -12,37 +12,19 @@ export class SubDeposit {
     amount: number = 0;
     type: string = "";
     payment_method: string = "cash";
-    fundId: string = "";
     userId: string = "";
+    remarks: string = '';
+    depositId: string = '';
 }
 
 
-export const GetSubDepositControllers = (id: string) => {
-    let depositService = new DepositService();
-    let options: any[] = [];
-    depositService.get({isOptions:true,}).then(
-        res => {
-            debugger
-            if (res) {
-                res.data.map((d: any) => {
-                    debugger
-                    console.log(d)
-                    options.push({ label: d.depositName, value: d._id });
-                    console.log(options)
-                }
-                )
-            }
-        })
+export const GetSubDepositControllers =
+   [ [
+        { name: "amount", label: "סכום", type: "number", required: true },
+        { name: "payment_method", label: "צורת הפקדה", type: "select", required: true, options: [...PaymentsMethod] },
+        { name: "remarks", label: "הערות", type: "text", required: false },
+    ]];
 
-    return [
-        [
-            { name: "type", label: "סוג", type: "select", required: true, options: [...types] },
-            { name: "depositName", label: "שם ההפקדה", type: "text", required: true },
-            { name: " payment_method", label: "צורת הפקדה", type: "select", required: true , options: [...PaymentsMethod]},
-            { name: "fundId", label: "עבור קרן", type: "select", required: true, options: options },
-        ]
-    ]
-}
 
 
 
