@@ -5,7 +5,7 @@ import axios from "axios";
 import { PaginateOptions } from "../modles/PaginateOptions";
 
 export class BaseService {
-    protected baseUrl = process.env.PORT?"https://super--gmach.herokuapp.com/":"http://localhost:5000/";
+    protected baseUrl = window.location.hostname !== "localhost"?"https://super--gmach.herokuapp.com/":"http://localhost:5000/";
     protected path: string;
 
     constructor(path: string) {
