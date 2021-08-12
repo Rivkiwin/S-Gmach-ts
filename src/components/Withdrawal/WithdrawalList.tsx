@@ -51,7 +51,7 @@ export const WithdrawalList = ({ userId }: any) => {
                         }
                     }
                     );
-                    debugger
+                    
                     setWithdrawals(list);
                     return list;
 

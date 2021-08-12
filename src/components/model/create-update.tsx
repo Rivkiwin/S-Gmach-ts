@@ -48,7 +48,6 @@ const CreatUpdate = (({ isShowing, hide, OnSubmit, type, header, rows, doc }: Ap
         name: "ron"
     }
     const handleChange = (event: any) => {
-        debugger
         doc[event.target.name] = event.target.value;
     };
 
@@ -64,8 +63,9 @@ const CreatUpdate = (({ isShowing, hide, OnSubmit, type, header, rows, doc }: Ap
                     <div className="txt-left"><Button variant="outlined" color="primary" onClick={hide}>
                         <span aria-hidden="true">&times;</span></Button></div>
                     <form id="form" className={"from"} noValidate autoComplete="off">
-
+         
                         {rows.map((row, index) => {
+                            debugger
                             return (
                                 <div >
                                     {row.map((c) => {

@@ -15,7 +15,7 @@ export class InputTextProps {
 
 
 const InputText = ({ name, label, value, required, onChange, type,defaultVale,refInput }: InputTextProps) => {
-
+    debugger
     return (
 
         <TextField defaultValue={defaultVale} variant="outlined"
@@ -24,6 +24,7 @@ const InputText = ({ name, label, value, required, onChange, type,defaultVale,re
             size="small"
             label={label}
             type={type}
+            
             onChange={onChange}
             required={required}
             inputRef={input=>{if(refInput) refInput(input)}}

@@ -18,12 +18,12 @@ export const GetWithdrawalControllers = (id: string) => {
     let options: any[] = []
     depositService.get({userId:id},true).then(
         res => {
-            debugger
+         
             if (res.data) {
                 res.data.docs.map((d: any) => {
-                    debugger
+                    
                     console.log(d);
-                    debugger
+                   
                     options.push({ label: `${d.depositName} (${d.amount})`, value: d._id });
                     console.log(options)
                 }

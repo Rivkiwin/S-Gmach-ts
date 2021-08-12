@@ -12,18 +12,9 @@ import { t } from './t';
 const userService = new UserService();
 
 
-const UserD = ({ id, uif }: any) => {
+const UserD = ({ id, uif,User }: any) => {
     const [userDetails, setDetails] = useState<any>([]);
-    const [User, setUser] = useState<any>({})
-
-    useEffect(() => {
-        userService.getById(id).then(
-            res => {
-                setUser(res.data)
-            })
-    }, []
-
-    )
+   
 
     useEffect(() => {
         let details: any[] = [];
@@ -41,7 +32,7 @@ const UserD = ({ id, uif }: any) => {
         });
         console.log(details);
         setDetails(creatDetailsMod(details, 4));
-    }, [User])
+    }, [])
 
     return (
         <CardContent>

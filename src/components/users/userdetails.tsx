@@ -30,8 +30,8 @@ const depositService = new DepositService();
 const fundService = new FundService();
 const withdrawalService = new WithdrawalService();
 
-const UserDetails = () => {
-    const [User, setUser] = useState<any>({});
+const UserDetails = ({ user }: any) => {
+    const [User, setUser] = useState<any>();
     const [DepositController, setDepositController] = useState<any>([{}]);
     const [uif, setUif] = useState<any>();
 
@@ -40,6 +40,8 @@ const UserDetails = () => {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
     const { id }: any = useParams();
+
+
     useEffect(() => {
         const dControllers = GetDepositControllers(id);
         setDepositController(dControllers);
@@ -60,6 +62,12 @@ const UserDetails = () => {
                 }
             }
         )
+
+        userService.getById(id).then(
+            res => {
+                setUser(res.data)
+            })
+
     }, []);
 
 
@@ -97,15 +105,15 @@ const UserDetails = () => {
                 <CreatUpdate
                     isShowing={isShowing2} hide={toggle2} OnSubmit={addDeposit}
                     type={"creat"} header={"header"} rows={DepositController} doc={new Deposit()} />
-                <CreatUpdate isShowing={isShowing} hide={toggle} OnSubmit={edit}
-                    type={"update"} header={"header"} rows={UserControllers} doc={User} />
+                {User && <CreatUpdate isShowing={isShowing} hide={toggle} OnSubmit={edit}
+                    type={"update"} header={"header"} rows={UserControllers} doc={User} />}
                 <Snackbar open={open} autoHideDuration={6000} >
                     <Alert onClose={() => setOpen(false)} severity="success">
                         {message}
                     </Alert>
                 </Snackbar>
             </CardActions>
-            {uif && <UserD id={id} uif={uif} />}
+            {uif && <UserD id={id} uif={uif} User={User}/>}
         </Card>
     )
 }

@@ -15,7 +15,7 @@ const WithdrawalCU = ({ id, setOpen, setMessage, uif }: any) => {
     useEffect(() => {
         const WControllers = GetWithdrawalControllers(id);
         console.log(WControllers, "WControllers");
-        debugger;
+       
         setWithdrawalControllers(WControllers);
         withdrawalService.get({ userId: id }).then(
             res => {
@@ -47,7 +47,7 @@ const WithdrawalCU = ({ id, setOpen, setMessage, uif }: any) => {
         else {
             let fund = uif.find((f: any) => f.uf.fundId == withdrawal.fundId);
             if (fund) {
-                debugger
+            
                 if ((withdrawal.amount * withdrawal.cnt ?? 1) > (fund.uf.balance - fund.futureWithdrawals)) {
                     setOpen(true);
                     setMessage(" הסכום * כמות גדול מהיתרה הנוכחית - משיכות עתדיות")

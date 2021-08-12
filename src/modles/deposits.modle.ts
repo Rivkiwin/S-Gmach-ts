@@ -21,10 +21,10 @@ export const GetDepositControllers = (id: string) => {
     let options: any[] = []
     fundService.getByUser(id).then(
         res => {
-            debugger
+     
             if (res.data.success) {
                 res.data.funds.map((f: any) => {
-                    debugger
+                   
                     console.log(f)
                     options.push({ label: f.fundName, value: f.uf.fundId });
                     console.log(options)
