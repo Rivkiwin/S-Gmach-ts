@@ -3,6 +3,7 @@
 import { Icon, Snackbar } from "@material-ui/core"
 import { Alert } from "@material-ui/lab"
 import React, { useEffect, useState } from "react"
+import { useHistory } from "react-router-dom"
 import { Loan } from "../../modles/loan.modle"
 import { PaginateOptions } from "../../modles/PaginateOptions"
 import { Status } from "../../modles/status"
@@ -10,7 +11,7 @@ import { loanService, LoanService } from "../../services/loan.service"
 import CreatUpdate from "../model/create-update"
 import EnhancedTable from "../model/list/baselist"
 import useModal from "../model/useModel"
-import AddLoan from "./addLoan"
+import AddLoan from "./add/addLoan"
 
 
 const headCells: any[] = [
@@ -27,8 +28,9 @@ const filters: any[] = [];
 
 const LoanList = () => {
     const { toggle, isShowing } = useModal();
-    const [rows, setRows] = useState<any[]>([])
+    const [rows, setRows] = useState<any[]>([]);
     const [paginator, sePaginator] = useState(new PaginateOptions());
+    const history = useHistory();
 
     useEffect(() => {
         getLoans()
@@ -39,12 +41,13 @@ const LoanList = () => {
             res => {
                 let data = res.data.docs.map((loan: Loan) => {
                     return {
+                        _id:loan._id,
                         type: loan.type,
                         status: Status.find(s => s.value === loan.status)?.label,
                         dateStart: loan.dateStart,
                         amount: loan.amount,
                         paid: loan.paid,
-                        monthlyRepayments: loan.amount/loan.numPayments,
+                        monthlyRepayments: loan.amount / loan.numPayments,
                         numMonth: loan.numMonth,
                         numPayments: loan.numPayments
                     }
@@ -54,8 +57,10 @@ const LoanList = () => {
         )
     }
 
-    function onselect(id: string) {
-
+    function onselect(loan: any) {
+        console.log(loan);
+        
+        history.push(`loanDetails/${loan._id}`);
     }
 
     return (

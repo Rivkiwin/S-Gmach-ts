@@ -2,12 +2,12 @@ import { Button, FormControl, Snackbar, TextField } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom";
-import { Loan, loanControllers } from "../../modles/loan.modle"
-import CheckboxController from "../model/from/checkBox";
-import DateController from "../model/from/date";
-import InputText from "../model/from/input";
-import SelectController from "../model/from/select";
-import TextArea from "../model/from/texrArea";
+import { Loan, loanControllers } from "../../../modles/loan.modle"
+import CheckboxController from "../../model/from/checkBox";
+import DateController from "../../model/from/date";
+import InputText from "../../model/from/input";
+import SelectController from "../../model/from/select";
+import TextArea from "../../model/from/texrArea";
 import AddBorrower from "./addBorrower";
 
 let newLoan: any = new Loan();

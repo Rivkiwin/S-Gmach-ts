@@ -7,6 +7,7 @@ import ListIcon from '@material-ui/icons/List';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import Reports from "./components/reports/Reports";
 import Incoms from "./components/pattyCash/incom/incoms";
+import LoanDetails from "./components/loan/details/loanDetails";
 
 export const routers = [
    {
@@ -43,5 +44,9 @@ export const routersB = [
    {
       component: DepositDetails,
       path: '/deposit/:id'
+   },
+   {
+      component: LoanDetails,
+      path: '/loanDetails/:id'
    }
 ]

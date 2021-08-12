@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button, Icon, TextField } from '@material-ui/core'
 import ReactDOM from 'react-dom'
-import useModal from '../model/useModel'
-import UsersList from '../users/usersList'
+import useModal from '../../model/useModel'
+import UsersList from '../../users/usersList'
 import HighlightOffSharpIcon from '@material-ui/icons/HighlightOffSharp';
-import { t } from '../model/t'
-import { loanService, LoanService } from '../../services/loan.service'
-import CheckboxController from '../model/from/checkBox'
+import { t } from '../../model/t'
+import { loanService, LoanService } from '../../../services/loan.service'
+import CheckboxController from '../../model/from/checkBox'
 import { AnyCnameRecord } from 'node:dns'
 
 const AddBorrower = ({ newLoan, AutomaticDivision, setDivision, refAmount }: any) => {

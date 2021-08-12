@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BaseService } from "./baseService";
 
-export class LoanService extends BaseService {
+export class BorrowerService extends BaseService {
 
     constructor() {
         super("borrower");
@@ -12,3 +12,4 @@ export class LoanService extends BaseService {
         return res;
     }
 }
+export const borrowerService=new BorrowerService();
